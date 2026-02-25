@@ -1,21 +1,34 @@
+import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
-    androidTarget {
+    android {
+        namespace = "org.example.cinescope"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        withJava()
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
+        // En el momento que quiera hacer test, incluirlos
+//        withHostTest { isIncludeAndroidResources = true }
+//        withDeviceTest {
+//            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        }
+
+        androidResources { enable = true }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -25,13 +38,13 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm()
-    
+
     sourceSets {
         androidMain.dependencies {
-            implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            // compose.uiToolingPreview se mueve a androidRuntimeClasspath (ver abajo)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -53,35 +66,10 @@ kotlin {
     }
 }
 
-android {
-    namespace = "org.example.cinescope"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        applicationId = "org.example.cinescope"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
+// debugImplementation reemplazada por androidRuntimeClasspath
 dependencies {
-    debugImplementation(libs.compose.uiTooling)
+    "androidRuntimeClasspath"(libs.compose.uiTooling)
 }
 
 compose.desktop {
