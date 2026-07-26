@@ -6,13 +6,13 @@
 
 # --- Build · Android ---
 agp = "9.0.0"
-androidKotlinMultiplatformLibrary = "9.2.1"
+androidKotlinMultiplatformLibrary = "9.3.1"
 android-compileSdk = "37"
 android-minSdk = "24"
 android-targetSdk = "37"
 
 # --- Build · Multiplatform ---
-kotlin = "2.4.0"
+kotlin = "2.4.10"
 
 
 # ============================================================
@@ -24,7 +24,7 @@ kotlinx-coroutines = "1.11.0"
 
 # --- Core · Android ---
 #androidx-core = "1.17.0"
-androidx-lifecycle = "2.10.0"
+androidx-lifecycle = "2.11.0"
 
 
 # ============================================================
@@ -33,7 +33,7 @@ androidx-lifecycle = "2.10.0"
 
 # --- UI · Multiplatform ---
 composeMultiplatform = "1.11.1"
-composeHotReload = "1.1.1"
+composeHotReload = "1.2.0"
 
 # --- UI · Android ---
 androidx-activity = "1.13.0"
